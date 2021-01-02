@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "recipe-manager.fullname" . }}
+  labels:
+    {{- include "recipe-manager.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicasCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "recipe-manager.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "recipe-manager.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "recipe-manager.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "docker.io/ottenwbe/recipes-manager:{{ .Values.recipesManager.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          #livenessProbe:
+          #  httpGet:
+          #    path: /api/v1/sources
+          #    port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /api/v1/sources
+          #    port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: config
+            mountPath: "/etc/recipes-manager"
+            readOnly: true
+          - name: drive-config
+            mountPath: "/etc/recipes-manager-drive"
+            readOnly: true              
+      {{- with .Values.nodeSelector }}                          
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: recipes-manager-config
+            items:
+            - key: "recipes-manager-config.yml"
+              path: "recipes-manager-config.yml"           
+        - name: drive-config
+          secret:
+            secretName: backend-secrets
+            items:
+            - key: "client_secret.json"
+              path: "client_secret.json"                                   

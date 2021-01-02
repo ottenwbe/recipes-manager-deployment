@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-go-cook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-go-cook
+  template:
+    metadata:
+      labels:
+        app: db-go-cook
+    spec:
+      containers:
+      - name: go-cook-database
+        image: mongo:4
+        imagePullPolicy: IfNotPresent 
+        ports:
+        - containerPort: 27017
+          name: mongoport
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 200m
+            memory: 300Mi
+        volumeMounts:
+        - name: database-persistent-storage
+          mountPath: /data
+      volumes:
+      - name: database-persistent-storage
+        persistentVolumeClaim:
+          claimName: database-pv-claim              

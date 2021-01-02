@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-go-cook-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-go-cook-ui
+  template:
+    metadata:
+      labels:
+        app: app-go-cook-ui
+    spec:
+      containers:
+        - name: go-cook-ui
+          image: "docker.io/ottenwbe/recipes-manager-ui:{{ .Values.ui.image.tag }}"
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 5000
+            name: ui
+          env: 
+            - name: REACT_APP_APP_NAME
+              value: "BELA Recipes"            
+            - name: REACT_APP_PAGE_HEADER_SUB
+              value: "Enjoy delicous recipes"  
+            - name: REACT_APP_PAGE_FOOTER_TEXT
+              value: "That's all folks ..."            
+            - name: REACT_APP_WELCOME_TEXT
+              value: "Welcome to BELA Recipes"                          
+            - name: REACT_APP_WELCOME_SUB_TEXT
+              value: "Enjoy the delicious Recipes"                 
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 300Mi

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: recipes-manager-config
+data:
+  recipes-manager-config.yml: |
+    recipeDB:
+      host: mongodb://db-service:27017
+    drive:
+      connection:
+        secret:
+          file: /etc/recipes-manager-drive/client_secret.json
+    log:
+      level: debug
