@@ -32,5 +32,7 @@ Kubernetes deployment for recipes-manager
 
         helm install test-recipes-manager charts/recipe-manager --namespace test-recipes-manager --create-namespace -f myvals.yml
 
+1. Delete HELM deployment
 
+        helm delete test-recipes-manger --namespace test-recipes-manager
         
