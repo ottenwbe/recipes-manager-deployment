@@ -1,23 +1,30 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: go-cook-ingress  
+  name: recipes-manager-ingress 
 spec:
   rules:
   - http:
-      paths:
+      paths:              
+      - path: /api/v1/recommendation
+        pathType: Prefix      
+        backend:
+          service:
+            name: recommendations-service
+            port: 
+              number: 5000            
       - path: /swagger
         pathType: Prefix      
         backend:
           service:
-            name: backend-service
+            name: recipes-manager-service
             port: 
               number: 8080          
       - path: /api
         pathType: Prefix      
         backend:
           service:
-            name: backend-service
+            name: recipes-manager-service
             port: 
               number: 8080      
       - path: /

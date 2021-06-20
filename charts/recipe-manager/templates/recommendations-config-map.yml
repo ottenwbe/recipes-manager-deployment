@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: recipes-recommendations-config
+data:
+  config.yml: |
+    recipe-server: 'http://recipes-manager-service:8080'

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "recipe-manager.fullname" . }}
+  name: {{ include "recipe-manager.name" . }}
   labels:
     {{- include "recipe-manager.labels" . | nindent 4 }}
 spec:
@@ -28,10 +28,10 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: "recipes-manager-app"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "docker.io/ottenwbe/recipes-manager:{{ .Values.recipesManager.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.registry }}/ottenwbe/recipes-manager:{{ .Values.recipesManager.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -50,7 +50,7 @@ spec:
           volumeMounts:
           - name: config
             mountPath: "/etc/recipes-manager"
-            readOnly: true
+            readOnly: true 
           - name: drive-config
             mountPath: "/etc/recipes-manager-drive"
             readOnly: true              
@@ -65,7 +65,7 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+      {{- end }} 
       volumes:
         - name: config
           configMap:
@@ -75,7 +75,7 @@ spec:
               path: "recipes-manager-config.yml"           
         - name: drive-config
           secret:
-            secretName: backend-secrets
+            secretName: recipes-manager-secrets
             items:
             - key: "client_secret.json"
               path: "client_secret.json"                                   

@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-go-cook-ui
+  name: recipes-manager-ui-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-go-cook-ui
+      app: recipes-manager-ui-app
   template:
     metadata:
       labels:
-        app: app-go-cook-ui
+        app: recipes-manager-ui-app
     spec:
       containers:
-        - name: go-cook-ui
-          image: "docker.io/ottenwbe/recipes-manager-ui:{{ .Values.ui.image.tag }}"
-          imagePullPolicy: Always
+        - name: recipes-manager-ui
+          image: "{{ .Values.image.registry }}/ottenwbe/recipes-manager-ui:{{ .Values.ui.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           - containerPort: 5000
             name: ui
@@ -32,8 +32,8 @@ spec:
               value: "Enjoy the delicious Recipes"                 
           resources:
             limits:
-              cpu: "1"
-              memory: 2Gi
+              cpu: {{ .Values.ui.limits.cpu | default "1" }}
+              memory: {{ .Values.ui.limits.memory | default "1Gi" }}
             requests:
-              cpu: 200m
-              memory: 300Mi
+              cpu: {{ .Values.ui.requests.cpu | default "200m" }}
+              memory: {{ .Values.ui.requests.memory | default "300Mi" }}

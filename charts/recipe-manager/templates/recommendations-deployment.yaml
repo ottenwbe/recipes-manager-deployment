@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recipes-recommendation-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recipes-recommendation-app
+  template:
+    metadata:
+      labels:
+        app: recipes-recommendation-app
+    spec:
+      containers:
+      - name: recipes-recommendations
+        image: "{{ .Values.image.registry }}/ottenwbe/recipes-manager-recommender:{{ .Values.ui.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 5000
+          name: recommend
+        volumeMounts: 
+        - name: config
+          mountPath: "/etc/recipes-recommendations"
+          readOnly: true          
+        resources:
+          limits:
+            cpu: {{ .Values.recommender.limits.cpu | default "1" }}
+            memory: {{ .Values.recommender.limits.memory | default "1Gi" }}
+          requests:
+            cpu: {{ .Values.recommender.requests.cpu | default "200m" }}
+            memory: {{ .Values.recommender.requests.memory | default "300Mi" }}
+      volumes:
+        - name: config
+          configMap:
+            name: recipes-recommendations-config
+            items:
+            - key: "config.yml"
+              path: "config.yml"                       
