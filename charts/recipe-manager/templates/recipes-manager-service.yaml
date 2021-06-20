@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
+  name: recipes-manager-service
   labels:
     {{- include "recipe-manager.labels" . | nindent 4 }}
 spec:

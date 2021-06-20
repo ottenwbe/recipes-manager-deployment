@@ -5,17 +5,46 @@
 replicasCount: 1
 
 image:
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
+  registry: docker.io
 
 ui:
   image:
     tag: "0.2.0"
+  limits:
+    cpu: "1"
+    memory: 1Gi
+  requests:
+    cpu: 200m
+    memory: 300Mi
 
 recipesManager:
   image:
-    tag: "v0.3.0"
+    tag: "v0.4.0"
   drive:
     secrets: {}
+
+recommender:
+  image:
+    tag: "v0.1.0"
+  limits:
+    cpu: "1"
+    memory: 1Gi
+  requests:
+    cpu: 200m
+    memory: 300Mi  
+    
+db:
+  size: "5Gi"
+  image:
+    name: mongo
+    tag: 4
+  limits:
+    cpu: "1"
+    memory: 1Gi
+  requests:
+    cpu: 200m
+    memory: 300Mi    
 
 imagePullSecrets: []
 nameOverride: ""
@@ -60,7 +89,9 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources: 
+  limits:
+    cpu: 100m
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
