@@ -4,10 +4,5 @@ metadata:
   name: recipes-manager-ui-config
 data:
   strings.json: |
-    {
-    "appName": "BELA Recipes",
-    "pageHeader" : {"sub" : "Enjoy delicous recipes"},
-    "footer" : {"text": "That's all folks ..."},
-    "welcome" : "Welcome to BELA Recipes",
-    "welcomesSub" : "Enjoy the delicious Recipe"
-    }
+    {{ .Values.ui.strings }}
+   

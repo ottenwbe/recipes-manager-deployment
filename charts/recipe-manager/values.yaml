@@ -18,6 +18,8 @@ ui:
   requests:
     cpu: 200m
     memory: 300Mi
+  strings: |
+    {"appName": "BELA Recipes","pageHeader" : {"sub" : "Enjoy delicous recipes"},"footer" : {"text": "That's all folks ..."},"welcome" : "Welcome to BELA Recipes","welcomesSub" : "Enjoy the delicious Recipe"}
 
 recipesManager:
   config:
