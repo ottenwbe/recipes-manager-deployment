@@ -6,8 +6,8 @@ metadata:
     {{- include "recipe-manager.labels" . | nindent 4 }}
 spec:
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: {{ .Values.recipesManager.port | default "8080" }}
+      targetPort: {{ .Values.recipesManager.port | default "8080" }}
       protocol: TCP
       name: http
   selector:

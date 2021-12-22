@@ -7,5 +7,5 @@ spec:
     app: recipes-manager-ui-app
   ports:
     - protocol: TCP
-      port: 5000
-      targetPort: 5000
+      port: {{ .Values.ui.port | default "5000" }}
+      targetPort: {{ .Values.ui.port | default "5000" }}

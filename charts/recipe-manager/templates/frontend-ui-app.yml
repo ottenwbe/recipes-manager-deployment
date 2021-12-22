@@ -17,12 +17,8 @@ spec:
           image: "{{ .Values.image.registry }}/ottenwbe/recipes-manager-ui:{{ .Values.ui.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-          - containerPort: 5000
+          - containerPort: {{ .Values.ui.port | default "5000" }}
             name: ui
-          #livenessProbe:
-          #  httpGet:
-          #    path: /#/health
-          #    port: ui
           readinessProbe:
             httpGet:
               path: /#/health

@@ -17,7 +17,7 @@ spec:
         image: "{{ .Values.image.registry }}/ottenwbe/recipes-manager-recommender:{{ .Values.recommender.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: 5000
+        - containerPort: {{ .Values.recommender.port | default "5000" }}
           name: recommend
         volumeMounts: 
         - name: config
