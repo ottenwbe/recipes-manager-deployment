@@ -7,5 +7,5 @@ spec:
     app: recipes-recommendation-app
   ports:
     - protocol: TCP
-      port: 5000
-      targetPort: 5000
+      port: {{ .Values.recommender.port | default "5000" }}
+      targetPort: {{ .Values.recommender.port | default "5000" }}

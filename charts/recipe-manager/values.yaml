@@ -20,6 +20,8 @@ ui:
     memory: 300Mi
 
 recipesManager:
+  config:
+    log: debug
   port: 8080
   image:
     tag: "v0.4.0"
