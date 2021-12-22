@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: recipes-recommendations
-        image: "{{ .Values.image.registry }}/ottenwbe/recipes-manager-recommender:{{ .Values.ui.image.tag }}"
+        image: "{{ .Values.image.registry }}/ottenwbe/recipes-manager-recommender:{{ .Values.recommender.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 5000

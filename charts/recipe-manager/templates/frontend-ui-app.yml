@@ -19,21 +19,30 @@ spec:
           ports:
           - containerPort: 5000
             name: ui
-          env: 
-            - name: REACT_APP_APP_NAME
-              value: "BELA Recipes"            
-            - name: REACT_APP_PAGE_HEADER_SUB
-              value: "Enjoy delicous recipes"  
-            - name: REACT_APP_PAGE_FOOTER_TEXT
-              value: "That's all folks ..."            
-            - name: REACT_APP_WELCOME_TEXT
-              value: "Welcome to BELA Recipes"                          
-            - name: REACT_APP_WELCOME_SUB_TEXT
-              value: "Enjoy the delicious Recipes"                 
+          #livenessProbe:
+          #  httpGet:
+          #    path: /#/health
+          #    port: ui
+          readinessProbe:
+            httpGet:
+              path: /#/health
+              port: ui                           
           resources:
             limits:
               cpu: {{ .Values.ui.limits.cpu | default "1" }}
               memory: {{ .Values.ui.limits.memory | default "1Gi" }}
             requests:
-              cpu: {{ .Values.ui.requests.cpu | default "200m" }}
+              cpu: {{ .Values.ui.requests.cpu | default "100m" }}
               memory: {{ .Values.ui.requests.memory | default "300Mi" }}
+          volumeMounts:
+          - name: config
+            mountPath: "/app/src/strings.json"
+            subPath: "strings.json"
+            readOnly: true               
+      volumes:
+        - name: config
+          configMap:
+            name: recipes-manager-ui-config
+            items:
+            - key: "strings.json"
+              path: "strings.json"                 
