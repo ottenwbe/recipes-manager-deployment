@@ -11,7 +11,7 @@ image:
 ui:
   port: 5000
   image:
-    tag: "0.2.0"
+    tag: "v0.4.0"
   limits:
     cpu: "1"
     memory: 1Gi
@@ -26,14 +26,14 @@ recipesManager:
     log: debug
   port: 8080
   image:
-    tag: "v0.4.0"
+    tag: "v0.4.2"
   drive:
     secrets: {}
 
 recommender:
   port: 5000
   image:
-    tag: "v0.1.0"
+    tag: "v0.1.1"
   limits:
     cpu: "1"
     memory: 1Gi
