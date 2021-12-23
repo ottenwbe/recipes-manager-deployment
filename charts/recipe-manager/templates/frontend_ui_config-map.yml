@@ -3,9 +3,6 @@ kind: ConfigMap
 metadata:
   name: recipes-manager-ui-config
 data:
-  dotenv: |
-    REACT_APP_APP_NAME=BELA Recipes
-    REACT_APP_PAGE_HEADER_SUB=<Subtitle Shown on Each Page>    
-    REACT_APP_PAGE_FOOTER_TEXT=That's all folks ...
-    REACT_APP_WELCOME_TEXT=<Welcome Text on Home Screen>
-    REACT_APP_WELCOME_SUB_TEXT=<Sub Welcome Text on Home Screen>
+  strings.json: |
+    {{ .Values.ui.strings }}
+   

@@ -5,10 +5,10 @@ metadata:
 data:
   recipes-manager-config.yml: |
     recipeDB:
-      host: mongodb://db-service:27017
+      host: mongodb://db-service:{{ .Values.db.port | default "5000" }}
     drive:
       connection:
         secret:
           file: /etc/recipes-manager-drive/client_secret.json
     log:
-      level: debug
+      level: {{ .Values.recipesManager.config.log | default "debug" }}

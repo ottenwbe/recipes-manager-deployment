@@ -28,23 +28,19 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: "recipes-manager-app"
+        - name: "recipes-manager"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.registry }}/ottenwbe/recipes-manager:{{ .Values.recipesManager.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.recipesManager.port | default "8080" }}
               protocol: TCP
-          #livenessProbe:
-          #  httpGet:
-          #    path: /api/v1/sources
-          #    port: http
-          #readinessProbe:
-          #  httpGet:
-          #    path: /api/v1/sources
-          #    port: http
+          readinessProbe:
+            httpGet:
+              path: /api/v1/sources
+              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:

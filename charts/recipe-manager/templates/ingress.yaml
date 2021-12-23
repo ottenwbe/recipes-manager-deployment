@@ -12,25 +12,25 @@ spec:
           service:
             name: recommendations-service
             port: 
-              number: 5000            
+              number: {{ .Values.recommender.port | default "5000" }}            
       - path: /swagger
         pathType: Prefix      
         backend:
           service:
             name: recipes-manager-service
             port: 
-              number: 8080          
+              number: {{ .Values.recipesManager.port | default "8080" }}
       - path: /api
         pathType: Prefix      
         backend:
           service:
             name: recipes-manager-service
             port: 
-              number: 8080      
+              number: {{ .Values.recipesManager.port | default "8080" }}
       - path: /
         pathType: Prefix      
         backend:
           service:
             name: ui-service
             port: 
-              number: 5000
+              number: {{ .Values.ui.port | default "5000" }}
