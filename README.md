@@ -51,4 +51,4 @@ Kubernetes deployment for recipes-manager and all it's micro-services.
 
 To delete HELM deployment
 
-        helm delete test-recipes-manger --namespace test-recipes-manager
+        helm delete test-recipes-manager --namespace test-recipes-manager
