@@ -26,13 +26,13 @@ spec:
           resources:
             limits:
               cpu: {{ .Values.ui.limits.cpu | default "1" }}
-              memory: {{ .Values.ui.limits.memory | default "1Gi" }}
+              memory: {{ .Values.ui.limits.memory | default "4Gi" }}
             requests:
               cpu: {{ .Values.ui.requests.cpu | default "100m" }}
-              memory: {{ .Values.ui.requests.memory | default "300Mi" }}
+              memory: {{ .Values.ui.requests.memory | default "1Gi" }}
           volumeMounts:
           - name: config
-            mountPath: "/app/src/strings.json"
+            mountPath: "/app/public/strings.json"
             subPath: "strings.json"
             readOnly: true               
       volumes:

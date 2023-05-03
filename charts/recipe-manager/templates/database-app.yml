@@ -21,7 +21,7 @@ spec:
           name: mongoport
         resources:
           limits:
-            cpu: {{ .Values.db.limits.cpu | default "1" }}
+            cpu: {{ .Values.db.limits.cpu | default "2" }}
             memory: {{ .Values.db.limits.memory | default "1Gi" }}
           requests:
             cpu: {{ .Values.db.requests.cpu | default "200m" }}

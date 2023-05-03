@@ -4,8 +4,8 @@ metadata:
   name: recipes-manager-database-pv-claim
 spec:
   accessModes:
-    - ReadWriteMany
-#  storageClassName: longhorn
+    - ReadWriteOnce
+#  storageClassName: local-path
   resources:
     requests:
       storage: {{ .Values.db.size | default "5Gi" }}
