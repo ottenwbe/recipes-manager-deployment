@@ -8,7 +8,7 @@ cd ../recipes-manager-ui
 popd
 
 pushd .
-cd ../recipes-manager-ai/
+cd ../recipes-manager-recommender/
 ./make_docker_for_minikube.sh
 popd
 

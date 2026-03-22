@@ -29,23 +29,15 @@ Kubernetes deployment for recipes-manager and all it's micro-services.
 
         git clone https://github.com/ottenwbe/recipes-manager-deployment.git
 
-1. Adapt your configuration in a yaml file, i.e., myval.yml
-        
-        recipesManager:
-          drive:
-            secrets: |
-              <client secret>        
-        
 1. Deploy with HELM
 
-        helm install test-recipes-manager charts/recipe-manager --namespace test-recipes-manager --create-namespace -f myvals.yml
+        helm install test-recipes-manager charts/recipe-manager --namespace test-recipes-manager --create-namespace -f charts/recipe-manager/values-development.yaml
 
 ### Update Deployment
         
-1. Change the configruation yaml file
 1. Upgrade HELM deployment
 
-        helm upgrade test-recipes-manager charts/recipe-manager --namespace test-recipes-manager --create-namespace -f myvals.yml
+        helm upgrade test-recipes-manager charts/recipe-manager --namespace test-recipes-manager --create-namespace -f charts/recipe-manager/values-development.yaml
 
 ### Delete Deployment
 
