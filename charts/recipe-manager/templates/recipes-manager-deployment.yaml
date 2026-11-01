@@ -31,7 +31,7 @@ spec:
         - name: "recipes-manager"
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.registry }}/ottenwbe/recipes-manager:{{ .Values.recipesManager.image.tag | default .Chart.AppVersion }}"
+          image: "{{ if .Values.image.registry }}{{ .Values.image.registry }}/{{ end }}ottenwbe/recipes-manager:{{ .Values.recipesManager.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -39,16 +39,15 @@ spec:
               protocol: TCP
           readinessProbe:
             httpGet:
-              path: /api/v1/sources
+              path: /api/v1/version
               port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
           - name: config
             mountPath: "/etc/recipes-manager"
-            readOnly: true 
-          - name: drive-config
-            mountPath: "/etc/recipes-manager-drive"
             readOnly: true              
       {{- with .Values.nodeSelector }}                          
       nodeSelector:
@@ -68,10 +67,4 @@ spec:
             name: recipes-manager-config
             items:
             - key: "recipes-manager-config.yml"
-              path: "recipes-manager-config.yml"           
-        - name: drive-config
-          secret:
-            secretName: recipes-manager-secrets
-            items:
-            - key: "client_secret.json"
-              path: "client_secret.json"                                   
+              path: "recipes-manager-config.yml"                                   

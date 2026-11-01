@@ -14,15 +14,15 @@ spec:
     spec:
       containers:
         - name: recipes-manager-ui
-          image: "{{ .Values.image.registry }}/ottenwbe/recipes-manager-ui:{{ .Values.ui.image.tag }}"
+          image: "{{ if .Values.ui.image.registry }}{{ .Values.ui.image.registry }}/{{ else if .Values.image.registry }}{{ .Values.image.registry }}/{{ end }}{{ .Values.ui.image.name | default "ottenwbe/recipes-manager-ui" }}:{{ .Values.ui.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-          - containerPort: {{ .Values.ui.port | default "5000" }}
+          - containerPort: 80
             name: ui
           readinessProbe:
             httpGet:
-              path: /#/health
-              port: ui                           
+              path: /
+              port: 80
           resources:
             limits:
               cpu: {{ .Values.ui.limits.cpu | default "1" }}
@@ -32,7 +32,7 @@ spec:
               memory: {{ .Values.ui.requests.memory | default "1Gi" }}
           volumeMounts:
           - name: config
-            mountPath: "/app/public/strings.json"
+            mountPath: "/usr/share/nginx/html/strings.json"
             subPath: "strings.json"
             readOnly: true               
       volumes:
