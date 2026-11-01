@@ -194,3 +194,9 @@ These warnings are **harmless** and come from Kubernetes internally when it auto
 ### Registry Setup
 
 The local registry is accessed via `kubectl port-forward`, which creates a temporary tunnel to the minikube registry service. This connection is automatically cleaned up when scripts complete.
+
+### Disclaimer
+
+This repository is mainly for learning and testing. However, feel free to contribute if you are interested.
+
+AI Agents helped to support with updating the latest changes.
