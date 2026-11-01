@@ -182,6 +182,15 @@ For local development testing, TLS certificate verification is **intentionally d
 
 **⚠️ Important**: Do NOT disable TLS verification in production environments. These settings are only suitable for isolated local development.
 
+### Kubernetes API Deprecation Warnings
+
+When using minikube with Kubernetes v1.33+, you may see deprecation warnings like:
+```
+W1101 14:42:20.988287 warnings.go:70] v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+```
+
+These warnings are **harmless** and come from Kubernetes internally when it auto-creates Endpoints resources for Services. The `v1` Endpoints API is deprecated in favor of `discovery.k8s.io/v1` EndpointSlice, but both coexist in modern Kubernetes versions. The Helm chart has been updated to use current API versions (e.g., `autoscaling/v2` instead of `autoscaling/v2beta1`).
+
 ### Registry Setup
 
 The local registry is accessed via `kubectl port-forward`, which creates a temporary tunnel to the minikube registry service. This connection is automatically cleaned up when scripts complete.
