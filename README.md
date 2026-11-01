@@ -74,30 +74,21 @@ To delete HELM deployment:
 
 ## Accessing and Testing the Deployed Applications
 
-### Get Service URLs
+### Access services through Ingress
 
-After deployment, retrieve the ingress URL:
-
-```bash
-# Get the ingress hostname or IP
-kubectl get ingress -n test-recipes-manager
-
-# For minikube, you may need to use minikube service
-minikube service -n test-recipes-manager recipes-manager-ui
-minikube service -n test-recipes-manager recipes-manager-api
-```
-
-Or directly with port-forward for testing:
+With the Podman driver, the Minikube node IP is not necessarily reachable
+directly from the host. Start a local forward to the Ingress controller:
 
 ```bash
-# Frontend (UI)
-kubectl port-forward -n test-recipes-manager svc/ui-service 3000:80 &
-# Access at http://localhost:3000
-
-# Backend API
-kubectl port-forward -n test-recipes-manager svc/recipes-manager-api 8080:8080 &
-# Access at http://localhost:8080
+./ingress_test.sh
 ```
+
+Keep the command running, then open `http://localhost:8080`. The same Ingress
+routes the API at `/api`, the recommender at
+`/api/v1/recommendation`, and Swagger at `/swagger`.
+
+The Minikube startup script limits the local Ingress controller to one Nginx
+worker to avoid exhausting the Podman container's process limit.
 
 ### Testing the Frontend
 

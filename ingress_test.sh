@@ -1,65 +1,30 @@
-#!/bin/bash
-# ingress_test.sh - Simple script to access Ingress in minikube with podman driver
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "=========================================="
-echo "  Ingress Access for Minikube (Podman)  "
-echo "=========================================="
-echo ""
+NAMESPACE="${NAMESPACE:-test-recipes-manager}"
+LOCAL_PORT="${1:-8080}"
+INGRESS_NAME="recipes-manager-ingress"
+CONTROLLER_NAMESPACE="ingress-nginx"
+CONTROLLER_SERVICE="ingress-nginx-controller"
 
-NAMESPACE="test-recipes-manager"
-
-# Check if deployment exists
-if ! kubectl get ingress -n $NAMESPACE &>/dev/null; then
-    echo "❌ ERROR: No Ingress found in namespace '$NAMESPACE'"
-    echo "   Please run ./minikube_deploy.sh first"
+if ! kubectl -n "$NAMESPACE" get ingress "$INGRESS_NAME" >/dev/null 2>&1; then
+    echo "Ingress '$INGRESS_NAME' was not found in namespace '$NAMESPACE'." >&2
+    echo "Deploy the Helm chart before starting ingress access." >&2
     exit 1
 fi
 
-echo "✅ Ingress found in namespace: $NAMESPACE"
-echo ""
+kubectl -n "$CONTROLLER_NAMESPACE" rollout status \
+    deployment/ingress-nginx-controller --timeout=30s
 
-# Get minikube IP
-MINIKUBE_IP=$(minikube ip)
-echo "Minikube IP: $MINIKUBE_IP"
-echo ""
+echo "Ingress is available at http://localhost:${LOCAL_PORT}"
+echo "  UI:           http://localhost:${LOCAL_PORT}/"
+echo "  API:          http://localhost:${LOCAL_PORT}/api/v1/recipes"
+echo "  Recommender:  http://localhost:${LOCAL_PORT}/api/v1/recommendation/health"
+echo "  Swagger:      http://localhost:${LOCAL_PORT}/swagger/index.html"
+echo
+echo "Keep this process running while using the URLs. Press Ctrl-C to stop."
 
-# Get ingress controller NodePort
-NODEPORT=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.spec.ports[0].nodePort}' 2>/dev/null)
-
-if [ -z "$NODEPORT" ]; then
-    echo "❌ ERROR: Could not find ingress controller NodePort"
-    exit 1
-fi
-
-echo "Ingress Controller NodePort: $NODEPORT"
-echo ""
-
-echo "=========================================="
-echo "  ACCESS YOUR SERVICES  "
-echo "=========================================="
-echo ""
-echo "Since you're using the podman driver, use these commands:"
-echo ""
-echo "1. Start a tunnel (in a separate terminal):"
-echo "   minikube tunnel"
-echo ""
-echo "2. In another terminal, add this to /etc/hosts:"
-echo "   echo \"$MINIKUBE_IP chart-example.local\" | sudo tee -a /etc/hosts"
-echo ""
-echo "3. Then access your services at:"
-echo "   - UI:       http://chart-example.local/"
-echo "   - API:      http://chart-example.local/api/v1/recipes"
-echo "   - Recommender: http://chart-example.local/api/v1/recommendation/health"
-echo "   - Swagger:  http://chart-example.local/swagger"
-echo ""
-echo "=========================================="
-echo "  OR (Quick Method)  "
-echo "=========================================="
-echo ""
-echo "Use minikube service for each service:"
-echo "  minikube service -n $NAMESPACE ui-service"
-echo "  minikube service -n $NAMESPACE recipes-manager-service"
-echo "  minikube service -n $NAMESPACE recommendations-service"
-echo ""
-echo "This will open each service in your browser."
-echo ""
+exec kubectl -n "$CONTROLLER_NAMESPACE" port-forward \
+    --address 127.0.0.1 \
+    "service/${CONTROLLER_SERVICE}" \
+    "${LOCAL_PORT}:80"
