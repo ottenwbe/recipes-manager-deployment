@@ -33,4 +33,4 @@ spec:
           service:
             name: ui-service
             port: 
-              number: {{ .Values.ui.port | default "5000" }}
+              number: {{ .Values.ui.port | default "80" }}

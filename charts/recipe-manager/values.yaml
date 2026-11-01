@@ -5,26 +5,37 @@ image:
   registry: docker.io
 
 ui:
-  port: 5000
+  port: 80
   image:
+    name: "ottenwbe/recipes-manager-ui"
+    registry: ""
     tag: "latest"
   limits:
     cpu: "1"
-    memory: 512Mi
+    memory: 1Gi
   requests:
     cpu: 500m
-    memory: 1Gi
+    memory: 512Mi
   strings: |
     {"appName": "BELA Recipes","pageHeaderSub" : "Enjoy delicous recipes","footerText": "That's all folks ...","welcome" : "Welcome to BELA Recipes","welcomesSub" : "Enjoy the delicious Recipe", "recipesPageHeading" : "Recipes", "recipeFormTitle" : "Title"}
 
 recipesManager:
   config:
     log: debug
+    # Assuming the app expects MONGO_URL or similar via env
+    databaseUrl: "mongodb://db:27017"
   port: 8080
   image:
     tag: "latest"
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
   drive:
-    secrets: {}
+    secrets: ""
 
 recommender:
   port: 5000
@@ -43,7 +54,7 @@ db:
   image:
     registry: docker.io
     name: mongo
-    tag: 8
+    tag: 7
   limits:
     cpu: "1"
     memory: 1Gi
@@ -81,12 +92,17 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: chart-example.local
-      paths: []
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+        - path: /api
+          pathType: ImplementationSpecific
   tls: []
 
 resources: 
   limits:
-    cpu: 100m
+    cpu: 500m
+    memory: 512Mi
 
 autoscaling:
   enabled: false

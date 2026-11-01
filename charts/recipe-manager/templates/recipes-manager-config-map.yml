@@ -5,10 +5,14 @@ metadata:
 data:
   recipes-manager-config.yml: |
     recipeDB:
-      host: mongodb://db-service:{{ .Values.db.port | default "5000" }}
-    drive:
-      connection:
-        secret:
-          file: /etc/recipes-manager-drive/client_secret.json
+      host: mongodb://db-service:{{ .Values.db.port | default "27017" }}
+    html:
+      address: ":{{ .Values.recipesManager.port | default "8080" }}"
+      cors:
+        origin: "*"
     log:
       level: {{ .Values.recipesManager.config.log | default "debug" }}
+    drive:
+      enabled: false
+    keycloak:
+      enabled: false

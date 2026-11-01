@@ -4,15 +4,18 @@ set -ex
 
 pushd .
 cd ../recipes-manager-ui
-./scripts/make_docker_for_minikube.sh
+./scripts/docker.sh build --type dev
+minikube image load ottenwbe/recipes-manager-ui:development
 popd
 
 pushd .
 cd ../recipes-manager-recommender/
 ./make_docker_for_minikube.sh
+minikube image load ottenwbe/recipes-manager-recommender:development
 popd
 
 pushd .
 cd ../recipes-manager
-DOCKER_REGISTRY=localhost:5000 make docker-dev && DOCKER_REGISTRY=localhost:5000 make docker-push-dev
+make docker-dev
+minikube image load ottenwbe/recipes-manager:development
 popd
