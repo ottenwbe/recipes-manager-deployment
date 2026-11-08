@@ -18,7 +18,7 @@ echo "Cleaning environment..."
 echo "Building and loading UI image..."
 pushd .
 cd ../recipes-manager-ui
-./scripts/docker.sh build --type dev --tag "$DEV_TAG"
+./scripts/docker.sh build --type dev --tag "$DEV_TAG" --skip-validation
 # Use podman save and pipe to minikube image load since we're using podman
 podman save docker.io/ottenwbe/recipes-manager-ui:$DEV_TAG | minikube image load -
 popd
