@@ -19,9 +19,9 @@ podman rmi ottenwbe/recipes-manager-recommender:development 2>/dev/null || true
 podman rmi ottenwbe/recipes-manager:development 2>/dev/null || true
 
 # Clean UI dependencies
-echo "Cleaning UI node_modules and lock file..."
+echo "Cleaning UI node_modules..."
 cd "${0%/*}/../recipes-manager-ui" || exit 1
-rm -rf node_modules package-lock.json
+rm -rf node_modules
 
 # Clean recommender Python cache
 echo "Cleaning recommender Python cache..."
